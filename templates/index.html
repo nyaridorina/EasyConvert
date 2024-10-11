@@ -25,6 +25,10 @@
             font-size: 20px;
             margin-top: 20px;
         }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +42,10 @@
 
     {% if converted_value != None %}
         <p>Converted Value: {{ converted_value }} EUR</p>
+    {% endif %}
+
+    {% if api_error %}
+        <p class="error">{{ api_error }}</p>
     {% endif %}
 </body>
 </html>
