@@ -7,27 +7,31 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     converted_value = None
+    api_error = None
     if request.method == 'POST':
         try:
             huf_amount = float(request.form['huf_amount'])
             converted_value = convert_currency(huf_amount)
+            if "API Error" in converted_value or "Error:" in converted_value:
+                api_error = converted_value
+                converted_value = None
         except ValueError:
-            converted_value = "Invalid input"
-    return render_template('index.html', converted_value=converted_value)
+            api_error = "Invalid input. Please enter a valid number."
+    return render_template('index.html', converted_value=converted_value, api_error=api_error)
 
 # Function to connect to the API and convert HUF to EUR
 def convert_currency(amount_huf):
     try:
         # Make a request to the exchange rate API (replace with a valid API key)
         api_key = 'feec8b7611be09b0cad59a2b'
-        url = f'https://api.apilayer.com/exchangerates_data/convert?from=HUF&to=EUR&amount={amount_huf}&apikey={api_key}'
+        url = f'https://v6.exchangerate-api.com/v6/{api_key}/pair/HUF/EUR/{amount_huf}'
         response = requests.get(url)
         
         if response.status_code == 200:
             result = response.json()
-            return result.get('result', "Conversion error")
+            return result.get('conversion_result', "Conversion error")
         else:
-            return "API Error"
+            return f"API Error: {response.status_code} - {response.reason}"
     except Exception as e:
         return f"Error: {e}"
 
