@@ -6,7 +6,14 @@ app = Flask(__name__)
 # Home route that renders the HTML form
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('index.html')
+    converted_value = None
+    if request.method == 'POST':
+        try:
+            huf_amount = float(request.form['huf_amount'])
+            converted_value = convert_currency(huf_amount)
+        except ValueError:
+            converted_value = "Invalid input"
+    return render_template('index.html', converted_value=converted_value)
 
 # Function to connect to the API and convert HUF to EUR
 def convert_currency(amount_huf):
