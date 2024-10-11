@@ -12,7 +12,7 @@ def home():
 def convert_currency(amount_huf):
     try:
         # Make a request to the exchange rate API (replace with a valid API key)
-        api_key = 'YOUR_API_KEY'
+        api_key = 'feec8b7611be09b0cad59a2b'
         url = f'https://api.apilayer.com/exchangerates_data/convert?from=HUF&to=EUR&amount={amount_huf}&apikey={api_key}'
         response = requests.get(url)
         
