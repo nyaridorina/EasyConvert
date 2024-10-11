@@ -32,11 +32,11 @@
     
     <form method="post" action="/">
         <h2>HUF to EUR Converter</h2>
-        <input type="number" name="huf_amount" placeholder="Enter amount in HUF" required>
+        <input type="number" name="huf_amount" placeholder="Enter amount in HUF" required step="0.01">
         <button type="submit">Convert</button>
     </form>
 
-    {% if converted_value is not none %}
+    {% if converted_value != None %}
         <p>Converted Value: {{ converted_value }} EUR</p>
     {% endif %}
 </body>
