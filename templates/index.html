@@ -29,19 +29,23 @@
             color: red;
             font-weight: bold;
         }
+        .result {
+            color: green;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1>Currency Converter</h1>
     
     <form method="post" action="/">
-        <h2>HUF to EUR Converter</h2>
+        <h2>HUF to EUR Fast Converter</h2>
         <input type="number" name="huf_amount" placeholder="Enter amount in HUF" required step="0.01">
         <button type="submit">Convert</button>
     </form>
 
-    {% if converted_value != None %}
-        <p>Converted Value: {{ converted_value }} EUR</p>
+    {% if converted_value is not none %}
+        <p class="result">Converted Value: {{ converted_value }} EUR</p>
     {% endif %}
 
     {% if api_error %}
