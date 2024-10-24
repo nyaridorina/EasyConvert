@@ -18,10 +18,14 @@ def home():
             huf_amount = float(request.form['huf_amount'])
             if huf_amount <= 0:
                 raise ValueError("Amount must be greater than zero.")
-            converted_value = convert_currency(huf_amount)
-            if "API Error" in converted_value or "Error:" in converted_value:
-                api_error = converted_value
-                converted_value = None
+            conversion_result = convert_currency(huf_amount)
+            
+            # Determine if the result is an error or a successful conversion
+            if isinstance(conversion_result, str):
+                api_error = conversion_result
+            else:
+                converted_value = conversion_result
+
         except ValueError:
             api_error = "Invalid input. Please enter a valid number greater than zero."
     return render_template('index.html', converted_value=converted_value, api_error=api_error)
@@ -42,9 +46,15 @@ def convert_currency(amount_huf):
             return result.get('conversion_result', "Conversion error")
         else:
             return f"API Error: {response.status_code} - {response.reason}"
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request error: {e}")
+        return "An error occurred. Please check your network connection and try again."
+    except ValueError as e:
+        logging.error(f"Value error: {e}")
+        return str(e)
     except Exception as e:
-        logging.error(f"Error occurred during currency conversion: {e}")
-        return "An error occurred. Please try again later."
+        logging.error(f"Unexpected error: {e}")
+        return "An unexpected error occurred. Please try again later."
 
 if __name__ == '__main__':
     app.run(debug=True)
